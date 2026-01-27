@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import download from "downloadjs";
+import { useToast } from "@/hooks/use-toast";
 
 export default function PostDetail() {
   const [, params] = useRoute("/devotional/:slug");
@@ -16,6 +17,7 @@ export default function PostDetail() {
   const { data: post, isLoading, isError } = usePost(slug);
   const cardRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
 
   const shareUrl = window.location.href;
   const shareText = post ? `${post.title} - DailyGodsLove` : "";
@@ -108,31 +110,28 @@ export default function PostDetail() {
           </div>
 
           {/* Visual Share Card for Image Generation */}
-          <div className="hidden">
+          <div className="fixed -left-[2000px] top-0">
             <div 
               ref={cardRef}
-              className="w-[600px] aspect-square bg-white p-12 flex flex-col justify-between border-8 border-primary/10 text-center relative overflow-hidden"
+              className="w-[1080px] h-[1080px] bg-white p-24 flex flex-col justify-between text-center relative overflow-hidden"
               style={{ background: "linear-gradient(135deg, #fff 0%, #f8fafc 100%)" }}
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/5 rounded-full -ml-16 -mb-16" />
+              <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 rounded-full -mr-32 -mt-32" />
+              <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full -ml-32 -mb-32" />
               
-              <div className="relative z-10">
-                <div className="w-16 h-1 bg-accent mx-auto mb-8 rounded-full" />
-                <h2 className="text-4xl font-serif font-bold text-primary mb-8 leading-tight uppercase tracking-tight">
+              <div className="relative z-10 flex-grow flex flex-col justify-center">
+                <div className="w-32 h-2 bg-accent mx-auto mb-16 rounded-full" />
+                <h2 className="text-7xl font-serif font-bold text-primary mb-16 leading-tight uppercase tracking-tight px-12">
                   {post.title}
                 </h2>
-                <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mx-auto mb-8">
-                  <Share2 className="w-6 h-6 text-primary" />
-                </div>
-                <div className="text-2xl font-serif italic text-muted-foreground leading-relaxed px-4">
+                <div className="text-4xl font-serif italic text-muted-foreground leading-relaxed px-20">
                   "{post.excerpt}"
                 </div>
               </div>
 
-              <div className="relative z-10 pt-12 border-t border-primary/10">
-                <div className="text-xl font-serif font-bold text-primary">DailyGodsLove</div>
-                <div className="text-xs font-bold tracking-[0.2em] text-accent uppercase mt-2">Sharing the Gospel daily</div>
+              <div className="relative z-10 pt-16 border-t border-primary/10">
+                <div className="text-5xl font-serif font-bold text-primary tracking-tight">DailyGodsLove</div>
+                <div className="text-xl font-bold tracking-[0.4em] text-accent uppercase mt-6">Sharing the Gospel daily</div>
               </div>
             </div>
           </div>
@@ -150,20 +149,40 @@ export default function PostDetail() {
               <p className="text-muted-foreground text-sm">Pass on this encouragement to your friends and family.</p>
             </div>
             
-            <div className="p-8 bg-secondary/5 border-b border-border">
+            <div className="p-8 bg-secondary/5 border-b border-border grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button 
                 onClick={downloadCard}
                 disabled={isGenerating}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all shadow-md"
+                className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all shadow-md"
               >
-                {isGenerating ? "Generating..." : <><Download className="w-5 h-5" /> Download Share Card Image</>}
+                {isGenerating ? "Generating..." : <><Download className="w-5 h-5" /> Download Image</>}
               </button>
-              <p className="text-center text-xs text-muted-foreground mt-3 italic">
-                Download a beautiful card with your name to share on Instagram or Status!
-              </p>
+              
+              <button 
+                onClick={() => {
+                   const text = `${shareText}\n\n"${post.excerpt}"\n\nRead more at: ${shareUrl}`;
+                   if (navigator.share) {
+                     navigator.share({
+                       title: shareText,
+                       text: text,
+                       url: shareUrl
+                     }).catch(() => {
+                        // Fallback to clipboard
+                        navigator.clipboard.writeText(text);
+                        toast({ title: "Copied", description: "Share text copied to clipboard" });
+                     });
+                   } else {
+                     navigator.clipboard.writeText(text);
+                     toast({ title: "Copied", description: "Share text copied to clipboard" });
+                   }
+                }}
+                className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white border border-border text-primary font-bold hover:bg-secondary/20 transition-all shadow-sm"
+              >
+                <Share2 className="w-5 h-5" /> Share as Text
+              </button>
             </div>
 
-            <div className="p-6 flex justify-center gap-4 flex-wrap">
+            <div className="p-6 flex justify-center gap-4 flex-wrap border-b border-border">
               <button 
                 onClick={shareOnTwitter}
                 className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1DA1F2] text-white font-bold hover:brightness-110 transition-all text-sm"
