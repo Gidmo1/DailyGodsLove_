@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { usePost } from "@/hooks/use-posts";
 import { useRoute } from "wouter";
 import { format } from "date-fns";
-import { ArrowLeft, Twitter, Share2, Facebook } from "lucide-react";
+import { ArrowLeft, Twitter, Share2, Facebook, MessageCircle } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 
