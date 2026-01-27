@@ -3,13 +3,29 @@ import { Footer } from "@/components/Footer";
 import { usePost } from "@/hooks/use-posts";
 import { useRoute } from "wouter";
 import { format } from "date-fns";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Twitter, Share2, Facebook } from "lucide-react";
 import { Link } from "wouter";
+import { motion } from "framer-motion";
 
 export default function PostDetail() {
   const [, params] = useRoute("/devotional/:slug");
   const slug = params?.slug || "";
   const { data: post, isLoading, isError } = usePost(slug);
+
+  const shareUrl = window.location.href;
+  const shareText = post ? `${post.title} - DailyGodsLove` : "";
+
+  const shareOnTwitter = () => {
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const shareOnWhatsApp = () => {
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + " " + shareUrl)}`, '_blank');
+  };
+
+  const shareOnFacebook = () => {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
 
   if (isLoading) {
     return (
@@ -68,14 +84,47 @@ export default function PostDetail() {
 
         <div className="container-custom max-w-3xl mx-auto py-16">
           <div className="prose prose-lg prose-slate prose-headings:font-serif prose-headings:text-primary prose-a:text-accent prose-img:rounded-lg mx-auto">
-            {/* 
-              In a real app, this would likely be rendered via a markdown parser or rich text renderer.
-              For now, treating content as raw text with paragraphs.
-            */}
             {post.content.split('\n').map((paragraph, idx) => (
               paragraph.trim() ? <p key={idx}>{paragraph}</p> : <br key={idx} />
             ))}
           </div>
+
+          {/* Social Share Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-16 bg-white border border-border rounded-2xl overflow-hidden shadow-sm"
+          >
+            <div className="p-8 text-center border-b border-border bg-secondary/10">
+              <Share2 className="w-8 h-8 text-accent mx-auto mb-4" />
+              <h3 className="text-xl font-serif font-bold text-primary mb-2">Share the Gospel</h3>
+              <p className="text-muted-foreground text-sm">Pass on this encouragement to your friends and family.</p>
+            </div>
+            <div className="p-6 flex justify-center gap-4 flex-wrap">
+              <button 
+                onClick={shareOnTwitter}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1DA1F2] text-white font-bold hover:brightness-110 transition-all"
+              >
+                <Twitter className="w-5 h-5" /> Twitter
+              </button>
+              <button 
+                onClick={shareOnFacebook}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#4267B2] text-white font-bold hover:brightness-110 transition-all"
+              >
+                <Facebook className="w-5 h-5" /> Facebook
+              </button>
+              <button 
+                onClick={shareOnWhatsApp}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#25D366] text-white font-bold hover:brightness-110 transition-all"
+              >
+                <MessageCircle className="w-5 h-5" /> WhatsApp
+              </button>
+            </div>
+            <div className="p-4 bg-primary text-primary-foreground text-center text-xs font-bold tracking-widest uppercase">
+              DailyGodsLove - Sharing the Gospel daily
+            </div>
+          </motion.div>
 
           <div className="mt-16 pt-8 border-t border-border flex justify-between items-center">
              <Link href="/devotionals" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors font-medium">

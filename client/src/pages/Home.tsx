@@ -3,11 +3,50 @@ import { Footer } from "@/components/Footer";
 import { usePosts } from "@/hooks/use-posts";
 import { DevotionalCard } from "@/components/DevotionalCard";
 import { Link } from "wouter";
-import { ArrowRight, BookOpen, Heart, MessageCircle } from "lucide-react";
+import { ArrowRight, BookOpen, Heart, MessageCircle, Quote } from "lucide-react";
 import { motion } from "framer-motion";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { api } from "@shared/routes";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function Home() {
   const { data: posts, isLoading } = usePosts();
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+
+  const { data: dailyVerse, isLoading: isLoadingVerse } = useQuery({
+    queryKey: [api.dailyVerse.get.path],
+  });
+
+  const subscribeMutation = useMutation({
+    mutationFn: async (email: string) => {
+      const res = await apiRequest("POST", api.newsletter.subscribe.path, { email });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Success",
+        description: data.message,
+      });
+      setEmail("");
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to subscribe. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      subscribeMutation.mutate(email);
+    }
+  };
   
   // Display only the latest 3 posts
   const recentPosts = posts?.slice(0, 3);
@@ -43,6 +82,72 @@ export default function Home() {
               </Link>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Daily Verse Section */}
+      <section className="py-24 bg-white border-y border-border/50">
+        <div className="container-custom max-w-4xl">
+          <div className="text-center mb-12">
+            <span className="text-accent font-semibold tracking-widest uppercase text-xs mb-3 block">Daily Inspiration</span>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary">Verse of the Day</h2>
+          </div>
+
+          {isLoadingVerse ? (
+            <div className="h-64 bg-secondary/20 animate-pulse rounded-xl" />
+          ) : dailyVerse ? (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="bg-secondary/30 p-8 md:p-12 rounded-2xl relative overflow-hidden"
+            >
+              <Quote className="absolute top-8 left-8 w-16 h-16 text-primary/5 -z-0" />
+              <div className="relative z-10">
+                <p className="text-2xl md:text-3xl font-serif italic text-primary mb-6 leading-relaxed">
+                  "{dailyVerse.text}"
+                </p>
+                <p className="text-lg font-bold text-accent mb-8">
+                  — {dailyVerse.book} {dailyVerse.chapter}:{dailyVerse.verse}
+                </p>
+                <div className="pt-8 border-t border-primary/10">
+                  <h4 className="text-sm font-bold uppercase tracking-widest text-primary/60 mb-4">Today's Teaching</h4>
+                  <p className="text-muted-foreground leading-relaxed italic">
+                    {dailyVerse.teaching}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ) : null}
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-24 bg-secondary/20">
+        <div className="container-custom max-w-4xl text-center">
+          <div className="bg-white p-8 md:p-16 rounded-3xl shadow-sm border border-border/50">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary mb-6">Join Our Daily Walk</h2>
+            <p className="text-muted-foreground mb-10 max-w-xl mx-auto">
+              Subscribe to receive the Gospel and our latest devotionals directly in your inbox. No spam, just grace.
+            </p>
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+              <input 
+                type="email" 
+                required
+                placeholder="Enter your email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-grow px-6 py-4 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
+              />
+              <button 
+                type="submit"
+                disabled={subscribeMutation.isPending}
+                className="px-8 py-4 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/90 transition-all duration-200 disabled:opacity-50"
+              >
+                {subscribeMutation.isPending ? "Subscribing..." : "Subscribe"}
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
