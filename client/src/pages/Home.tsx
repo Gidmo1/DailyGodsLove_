@@ -3,18 +3,22 @@ import { Footer } from "@/components/Footer";
 import { usePosts } from "@/hooks/use-posts";
 import { DevotionalCard } from "@/components/DevotionalCard";
 import { Link } from "wouter";
-import { ArrowRight, BookOpen, Heart, MessageCircle, Quote } from "lucide-react";
+import { ArrowRight, BookOpen, Heart, MessageCircle, Quote, Download, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { api } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { toPng } from "html-to-image";
+import download from "downloadjs";
 
 export default function Home() {
   const { data: posts, isLoading } = usePosts();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const { data: dailyVerse, isLoading: isLoadingVerse } = useQuery({
     queryKey: [api.dailyVerse.get.path],
@@ -45,6 +49,38 @@ export default function Home() {
     e.preventDefault();
     if (email) {
       subscribeMutation.mutate(email);
+    }
+  };
+
+  const downloadVerseCard = async () => {
+    if (cardRef.current === null) return;
+    setIsGenerating(true);
+    try {
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true });
+      download(dataUrl, `DailyGodsLove-Verse-${new Date().toISOString().split('T')[0]}.png`);
+    } catch (err) {
+      console.error("Error generating image", err);
+      toast({ title: "Error", description: "Failed to generate image", variant: "destructive" });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const shareVerseAsText = () => {
+    if (!dailyVerse) return;
+    const text = `Verse of the Day\n\n"${dailyVerse.text}"\n— ${dailyVerse.book} ${dailyVerse.chapter}:${dailyVerse.verse}\n\nToday's Teaching: ${dailyVerse.teaching}\n\nDailyGodsLove - Sharing the Gospel daily`;
+    if (navigator.share) {
+      navigator.share({
+        title: "Verse of the Day",
+        text: text,
+        url: window.location.origin
+      }).catch(() => {
+        navigator.clipboard.writeText(text);
+        toast({ title: "Copied", description: "Verse text copied to clipboard" });
+      });
+    } else {
+      navigator.clipboard.writeText(text);
+      toast({ title: "Copied", description: "Verse text copied to clipboard" });
     }
   };
   
@@ -96,28 +132,73 @@ export default function Home() {
           {isLoadingVerse ? (
             <div className="h-64 bg-secondary/20 animate-pulse rounded-xl" />
           ) : dailyVerse ? (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="bg-secondary/30 p-8 md:p-12 rounded-2xl relative overflow-hidden"
-            >
-              <Quote className="absolute top-8 left-8 w-16 h-16 text-primary/5 -z-0" />
-              <div className="relative z-10">
-                <p className="text-2xl md:text-3xl font-serif italic text-primary mb-6 leading-relaxed">
-                  "{dailyVerse.text}"
-                </p>
-                <p className="text-lg font-bold text-accent mb-8">
-                  — {dailyVerse.book} {dailyVerse.chapter}:{dailyVerse.verse}
-                </p>
-                <div className="pt-8 border-t border-primary/10">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-primary/60 mb-4">Today's Teaching</h4>
-                  <p className="text-muted-foreground leading-relaxed italic">
-                    {dailyVerse.teaching}
-                  </p>
+            <div className="space-y-8">
+              {/* Visual Share Card for Image Generation (Hidden) */}
+              <div className="fixed -left-[2000px] top-0">
+                <div 
+                  ref={cardRef}
+                  className="w-[1080px] h-[1080px] bg-white p-24 flex flex-col justify-between text-center relative overflow-hidden"
+                  style={{ background: "linear-gradient(135deg, #fff 0%, #f8fafc 100%)" }}
+                >
+                  <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 rounded-full -mr-32 -mt-32" />
+                  <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full -ml-32 -mb-32" />
+                  
+                  <div className="relative z-10 flex-grow flex flex-col justify-center">
+                    <Quote className="w-24 h-24 text-primary/10 mx-auto mb-12" />
+                    <p className="text-6xl font-serif italic text-primary mb-16 leading-relaxed px-12">
+                      "{dailyVerse.text}"
+                    </p>
+                    <p className="text-4xl font-bold text-accent">
+                      — {dailyVerse.book} {dailyVerse.chapter}:{dailyVerse.verse}
+                    </p>
+                  </div>
+
+                  <div className="relative z-10 pt-16 border-t border-primary/10">
+                    <div className="text-5xl font-serif font-bold text-primary tracking-tight">DailyGodsLove</div>
+                    <div className="text-xl font-bold tracking-[0.4em] text-accent uppercase mt-6">Sharing the Gospel daily</div>
+                  </div>
                 </div>
               </div>
-            </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="bg-secondary/30 p-8 md:p-12 rounded-2xl relative overflow-hidden"
+              >
+                <Quote className="absolute top-8 left-8 w-16 h-16 text-primary/5 -z-0" />
+                <div className="relative z-10">
+                  <p className="text-2xl md:text-3xl font-serif italic text-primary mb-6 leading-relaxed">
+                    "{dailyVerse.text}"
+                  </p>
+                  <p className="text-lg font-bold text-accent mb-8">
+                    — {dailyVerse.book} {dailyVerse.chapter}:{dailyVerse.verse}
+                  </p>
+                  <div className="pt-8 border-t border-primary/10">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-primary/60 mb-4">Today's Teaching</h4>
+                    <p className="text-muted-foreground leading-relaxed italic">
+                      {dailyVerse.teaching}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button 
+                  onClick={downloadVerseCard}
+                  disabled={isGenerating}
+                  className="flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md disabled:opacity-50"
+                >
+                  {isGenerating ? "Generating..." : <><Download className="w-5 h-5" /> Download Image</>}
+                </button>
+                <button 
+                  onClick={shareVerseAsText}
+                  className="flex items-center justify-center gap-2 px-8 py-4 bg-white border border-border text-primary font-bold rounded-xl hover:bg-secondary/20 transition-all shadow-sm"
+                >
+                  <Share2 className="w-5 h-5" /> Share as Text
+                </button>
+              </div>
+            </div>
           ) : null}
         </div>
       </section>
