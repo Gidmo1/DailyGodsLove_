@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertPostSchema, posts } from './schema';
+import { insertPostSchema, posts, insertSubscriberSchema, subscribers } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -29,6 +29,17 @@ export const api = {
       responses: {
         200: z.custom<typeof posts.$inferSelect>(),
         404: errorSchemas.notFound,
+      },
+    },
+  },
+  newsletter: {
+    subscribe: {
+      method: 'POST' as const,
+      path: '/api/subscribe',
+      input: insertSubscriberSchema,
+      responses: {
+        200: z.object({ message: z.string() }),
+        400: errorSchemas.validation,
       },
     },
   },
