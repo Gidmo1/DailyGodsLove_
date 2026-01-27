@@ -41,6 +41,15 @@ export async function registerRoutes(
     }
   });
 
+  app.get(api.dailyVerse.get.path, async (req, res) => {
+    const today = new Date().toISOString().split('T')[0];
+    const verse = await storage.getDailyVerse(today);
+    if (!verse) {
+      return res.status(404).json({ message: "Daily verse not found" });
+    }
+    res.json(verse);
+  });
+
   await seedDatabase();
 
   return httpServer;
@@ -71,6 +80,19 @@ export async function seedDatabase() {
       excerpt: "Applying the greatest commandment in a modern world.",
       content: "In a world that often feels divided, the commandment to love our neighbor is more relevant than ever. This love is actionable. It looks like kindness to a stranger, patience with a difficult coworker, and generosity to those in need. By embodying Christ's love in our interactions, we become beacons of light in our communities.",
       isPublished: true
+    });
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const existingVerse = await storage.getDailyVerse(today);
+  if (!existingVerse) {
+    await storage.createBibleVerse({
+      book: "John",
+      chapter: "3",
+      verse: "16",
+      text: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.",
+      teaching: "This verse is the core of the Gospel. It reminds us of the immense love God has for humanity and the simple path to salvation through faith in Jesus Christ.",
+      dayOfYear: today
     });
   }
 }

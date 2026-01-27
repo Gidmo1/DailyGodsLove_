@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertPostSchema, posts, insertSubscriberSchema, subscribers } from './schema';
+import { insertPostSchema, posts, insertSubscriberSchema, subscribers, bibleVerses } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -40,6 +40,16 @@ export const api = {
       responses: {
         200: z.object({ message: z.string() }),
         400: errorSchemas.validation,
+      },
+    },
+  },
+  dailyVerse: {
+    get: {
+      method: 'GET' as const,
+      path: '/api/daily-verse',
+      responses: {
+        200: z.custom<typeof bibleVerses.$inferSelect>(),
+        404: errorSchemas.notFound,
       },
     },
   },

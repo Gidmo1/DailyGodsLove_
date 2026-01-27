@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { posts, subscribers, type Post, type InsertPost, type InsertSubscriber, type Subscriber } from "@shared/schema";
+import { posts, subscribers, bibleVerses, type Post, type InsertPost, type InsertSubscriber, type Subscriber, type BibleVerse, type InsertBibleVerse } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
@@ -8,6 +8,8 @@ export interface IStorage {
   createPost(post: InsertPost): Promise<Post>;
   createSubscriber(subscriber: InsertSubscriber): Promise<Subscriber>;
   getSubscriberByEmail(email: string): Promise<Subscriber | undefined>;
+  getDailyVerse(dayOfYear: string): Promise<BibleVerse | undefined>;
+  createBibleVerse(verse: InsertBibleVerse): Promise<BibleVerse>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -33,6 +35,16 @@ export class DatabaseStorage implements IStorage {
   async getSubscriberByEmail(email: string): Promise<Subscriber | undefined> {
     const [subscriber] = await db.select().from(subscribers).where(eq(subscribers.email, email));
     return subscriber;
+  }
+
+  async getDailyVerse(dayOfYear: string): Promise<BibleVerse | undefined> {
+    const [verse] = await db.select().from(bibleVerses).where(eq(bibleVerses.dayOfYear, dayOfYear));
+    return verse;
+  }
+
+  async createBibleVerse(insertBibleVerse: InsertBibleVerse): Promise<BibleVerse> {
+    const [verse] = await db.insert(bibleVerses).values(insertBibleVerse).returning();
+    return verse;
   }
 }
 
