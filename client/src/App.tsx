@@ -9,6 +9,7 @@ import Devotionals from "@/pages/Devotionals";
 import PostDetail from "@/pages/PostDetail";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import AdminDashboard from "@/pages/AdminDashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/devotional/:slug" component={PostDetail} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
