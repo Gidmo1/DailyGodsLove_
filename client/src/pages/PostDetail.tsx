@@ -129,7 +129,7 @@ export default function PostDetail() {
                 </div>
               </div>
 
-              <div className="relative z-10 pt-16 border-t border-primary/10">
+              <div className="relative z-10 pb-16 border-t border-primary/10">
                 <div className="text-5xl font-serif font-bold text-primary tracking-tight">DailyGodsLove</div>
                 <div className="text-xl font-bold tracking-[0.4em] text-accent uppercase mt-6">Sharing the Gospel daily</div>
               </div>
