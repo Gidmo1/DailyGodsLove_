@@ -101,7 +101,6 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row justify-between items-center text-sm text-primary-foreground/60">
           <p>&copy; {new Date().getFullYear()} DailyGodsLove. All rights reserved.</p>
           <p className="mt-4 md:mt-0 flex items-center">
-            Made with <Heart size={14} className="mx-1 text-accent fill-accent border-none" /> for the Kingdom
           </p>
         </div>
       </div>
