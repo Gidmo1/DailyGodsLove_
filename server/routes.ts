@@ -10,13 +10,7 @@ export async function registerRoutes(
 ): Promise<Server> {
   // ✅ Auth is OFF by default to avoid Replit-only env issues on other hosts.
   // Turn it on by setting: ENABLE_ADMIN=true
-  if (process.env.ENABLE_ADMIN === "true") {
-    const { setupAuth, registerAuthRoutes } = await import(
-      "./replit_integrations/auth"
-    );
-    await setupAuth(app);
-    registerAuthRoutes(app);
-  }
+  
 
   app.get(api.posts.list.path, async (req, res) => {
     const posts = await storage.getPosts();

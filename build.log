@@ -1,0 +1,100 @@
+
+> rest-express@1.0.0 build
+> tsx script/build.ts
+
+building client...
+vite v5.4.21 building for production...
+transforming...
+✓ 23 modules transformed.
+x Build failed in 5.85s
+[vite]: Rollup failed to resolve import "@shared/routes" from "/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/AdminDashboard.tsx".
+This is most likely unintended because it can break your application at runtime.
+If you do want to externalize this module explicitly add it to
+`build.rollupOptions.external`
+    at viteWarn (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:65855:17)
+    at onwarn (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/@vitejs/plugin-react/dist/index.js:90:7)
+    at onRollupWarning (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:65885:5)
+    at onwarn (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:65550:7)
+    at <anonymous> (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/rollup/dist/es/shared/node-entry.js:20969:13)
+    at Object.logger (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/rollup/dist/es/shared/node-entry.js:22942:9)
+    at ModuleLoader.handleInvalidResolvedId (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/rollup/dist/es/shared/node-entry.js:21686:26)
+    at <anonymous> (/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/rollup/dist/es/shared/node-entry.js:21644:26) {
+  watchFiles: [
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/index.html',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/main.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/package.json',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/react/jsx-runtime.js',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/App.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/react-dom/client.js',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/index.css',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/hooks/use-auth.ts',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/hooks/use-posts.ts',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/hooks/use-toast.ts',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/lib/auth-utils.ts',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/lib/queryClient.ts',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/lib/utils.ts',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/DevotionalCard.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/Footer.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/Navigation.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/hooks/use-mobile.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/About.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/AdminDashboard.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/Contact.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/Devotionals.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/Home.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/PostDetail.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/pages/not-found.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/accordion.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/alert-dialog.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/alert.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/aspect-ratio.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/avatar.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/badge.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/breadcrumb.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/button.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/calendar.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/card.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/carousel.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/chart.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/checkbox.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/collapsible.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/command.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/context-menu.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/dialog.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/drawer.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/dropdown-menu.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/form.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/hover-card.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/input-otp.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/input.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/label.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/menubar.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/navigation-menu.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/pagination.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/popover.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/progress.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/radio-group.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/resizable.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/scroll-area.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/select.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/separator.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/sheet.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/sidebar.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/skeleton.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/slider.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/switch.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/table.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/tabs.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/textarea.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/toast.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/toaster.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/toggle-group.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/toggle.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/client/src/components/ui/tooltip.tsx',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/tailwind.config.ts',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/react/cjs/react-jsx-runtime.production.js',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/wouter/src/index.js',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/react-dom/cjs/react-dom-client.production.js',
+    '/data/data/com.termux/files/home/Faithful-Message/DailyGodsLove_/node_modules/@tanstack/react-query/build/modern/index.js'
+  ]
+}
