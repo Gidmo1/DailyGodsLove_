@@ -137,6 +137,12 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  // Check if the user's email matches the admin email
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail && user.claims?.email !== adminEmail) {
+    return res.status(403).json({ message: "Forbidden: You are not the admin" });
+  }
+
   const now = Math.floor(Date.now() / 1000);
   if (now <= user.expires_at) {
     return next();
