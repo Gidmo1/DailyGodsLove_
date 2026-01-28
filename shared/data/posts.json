@@ -1,0 +1,18 @@
+[
+  {
+    "id": "walking-in-faith",
+    "title": "Walking in Faith",
+    "slug": "walking-in-faith",
+    "excerpt": "Understanding what it means to trust God in our daily lives.",
+    "content": "Faith is the substance of things hoped for...",
+    "publishedAt": "2026-01-01"
+  },
+  {
+    "id": "power-of-prayer",
+    "title": "The Power of Prayer",
+    "slug": "power-of-prayer",
+    "excerpt": "How daily communication with God transforms our perspective.",
+    "content": "Prayer is more than just asking for things...",
+    "publishedAt": "2026-01-02"
+  }
+]
