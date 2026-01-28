@@ -10,6 +10,10 @@
     "check": "tsc",
     "db:push": "drizzle-kit push"
   },
+  "dependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
+  },
   "devDependencies": {
     "esbuild": "^0.27.2",
     "tsx": "^4.21.0"
